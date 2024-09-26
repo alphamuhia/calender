@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding Events</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Wedding Events</h1>
+    <div>
+        <h2>Upcoming Events</h2>
+        <table id="eventsTable"></table>
+    </div>
+    <div>
+        <h2>Add Attendee</h2>
+        <input type="text" id="attendeeName" placeholder="Attendee Name">
+        <select id="eventSelector"></select>
+        <button onclick="addAttendee()">Add Attendee</button>
+    </div>
+    <div>
+        <h2>Delete Event</h2>
+        <input type="text" id="eventToDelete" placeholder="Event Title">
+        <button onclick="deleteEvent()">Delete Event</button>
+    </div>
+    <script>
+        // Create an array of event objects
+        let weddingEvents = [
+            {
+                title: "Arrival and Meet-up",
+                date: new Date(2024, 8, 21),
+                location: "Lavington Private Hall",
+                attendees: new Set(["Alpha", "Peter", "Joy", "Jane", "Lucy", "Kent", "Paul", "Beth", "John", "Trevor", "Victor"])
+            },
+            {
+                title: "Bridal Party Rehearsal",
+                date: new Date(2024, 8, 22),
+                location: "Lavington Private Hall",
+                attendees: new Set(["Alpha", "Peter", "Joy", "Jane", "Lucy", "Kent", "Paul", "Beth", "John", "Trevor", "Victor"])
+            },
+            {
+                title: "Groom's Party Rehearsal",
+                date: new Date(2024, 8, 23),
+                location: "Lavington Private Hall",
+                attendees: new Set(["Alpha", "Peter", "Joy", "Jane", "Lucy", "Kent", "Paul", "Beth", "John", "Trevor", "Victor"])
+            },
+            { title: "Family Dinner", 
+            date: new Date(2024, 8, 24), 
+            location: "Lavington Private Hall", 
+            attendees: new Set(["Alpha", "Peter", "Joy", "Jane", "Lucy", "Kent", "Paul", "Beth", "John", "Trevor", "Victor"]) 
+        },
+            { title: "Final Rehearsal", 
+            date: new Date(2024, 8, 25), 
+            location: "Lavington Private Hall", 
+            attendees: new Set(["Alpha", "Peter", "Joy", "Jane", "Lucy", "Kent", "Paul", "Beth", "John", "Trevor", "Victor"]) 
+        },
+            { title: "Pre-Wedding Party", 
+            date: new Date(2024, 8, 26), 
+            location: "Lavington Private Hall", 
+            attendees: new Set(["Alpha", "Peter", "Joy", "Jane", "Lucy", "Kent", "Paul", "Beth", "John", "Trevor", "Victor"]) 
+        },
+            { title: "Wedding Day", 
+            date: new Date(2024, 8, 27), 
+            location: "Lavington Private Hall", 
+            attendees: new Set(["Alpha", "Peter", "Joy", "Jane", "Lucy", "Kent", "Paul", "Beth", "John", "Trevor", "Victor", "Bob", "Alice", "Stephen", "Job", "Issac", "Jacob", "Abraham", "Mary", "Mercy", "Tatiana", "Dun", "Charlie", "Henry", "Dave", "Ivy", "Sophie"]) 
+        }
+        ];
+
+        // Populate the events table
+        function displayEvents() {
+            let table = document.getElementById('eventsTable');
+            table.innerHTML = '<tr><th>Title</th><th>Date</th><th>Location</th><th>Attendees</th></tr>';
+
+            weddingEvents.forEach(event => {
+                let row = document.createElement('tr');
+                let attendeesList = Array.from(event.attendees).join(', ');
+                row.innerHTML = `<td>${event.title}</td><td>${event.date.toLocaleDateString()}</td><td>${event.location}</td><td>${attendeesList}</td>`;
+                table.appendChild(row);
+            });
+
+            // Populate event selector
+            let eventSelector = document.getElementById('eventSelector');
+            eventSelector.innerHTML = '';
+            weddingEvents.forEach(event => {
+                let option = document.createElement('option');
+                option.value = event.title;
+                option.textContent = event.title;
+                eventSelector.appendChild(option);
+            });
+        }
+
+        // Function to add a new attendee
+        function addAttendee() {
+            let attendeeName = document.getElementById('attendeeName').value;
+            let eventTitle = document.getElementById('eventSelector').value;
+
+            let event = weddingEvents.find(e => e.title === eventTitle);
+            if (event && attendeeName) {
+                event.attendees.add(attendeeName);
+                console.log(`${attendeeName} added to ${eventTitle}`);
+                displayEvents();
+                document.getElementById('attendeeName').value = '';
+            } else {
+                console.log("Event not found or name is empty!");
+            }
+        }
+
+        // Function to delete an event by title
+        function deleteEvent() {
+            let eventTitle = document.getElementById('eventToDelete').value;
+
+            let index = weddingEvents.findIndex(event => event.title === eventTitle);
+            if (index !== -1) {
+                weddingEvents.splice(index, 1);
+                console.log(`${eventTitle} has been deleted.`);
+                displayEvents(); 
+                document.getElementById('eventToDelete').value = '';
+            } else {
+                console.log("Event not found!");
+            }
+        }
+
+        // Display initial events
+        displayEvents();
+    </script>
+</body>
+
+</html>
